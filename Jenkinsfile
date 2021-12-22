@@ -22,28 +22,11 @@ pipeline {
                //sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
               }
         } 
-
-        //stage (nexus_upload) {
-           //steps {
-              //nexusArtifactUploader artifacts: [[artifactId: 'maven-project', classifier: '', file: //'server/target/server.jar', type: 'pom']], credentialsId: 'nexus-cred', groupId: 'com.example.maven-project', //nexusUrl: '3.92.207.138:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'mvn-snapshot', version: //'1.0-SNAPSHOT'		
-              //}
-        //} 
-		
-        //stage (deploy_to_tomcat) {
-           //steps {
-              //deploy adapters: [tomcat8(path: '', url: 'http://54.82.235.95:8080/')], contextPath: null, war: '**/*.jar'	
-              //}
-        //}
-        //stage (slack_notification) {
-          // steps {
-             // slackSend channel: 'dev', message: 'Deployment is done'
-              //}
-        //} 
         stage ('DEV Approve') {
-          steps {
-            echo "Taking approval from DEV Manager for QA Deployment"
-            timeout(time: 7, unit: 'DAYS') {
-            input message: 'Do you want to deploy?', submitter: 'admin'
+           steps {
+             echo "Taking approval from DEV Manager for QA Deployment"
+             timeout(time: 7, unit: 'DAYS') {
+             input message: 'Do you want to deploy?', submitter: 'admin'
           }
         }
       }	

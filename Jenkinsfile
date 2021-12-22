@@ -22,14 +22,14 @@ pipeline {
                //sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
               }
         } 
-        stage ('DEV Approve') {
-           steps {
-             echo "Taking approval from DEV Manager for QA Deployment"
-             timeout(time: 7, unit: 'DAYS') {
-             input message: 'Do you want to deploy?', submitter: 'admin'
-          }
-        }
-      }	
+        //stage ('DEV Approve') {
+          // steps {
+           //  echo "Taking approval from DEV Manager for QA Deployment"
+           // timeout(time: 7, unit: 'DAYS') {
+            // input message: 'Do you want to deploy?', submitter: 'admin'
+         // }
+        //}
+      //}	
 		
     }    
 	

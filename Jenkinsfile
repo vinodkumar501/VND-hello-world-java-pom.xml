@@ -12,26 +12,57 @@ pipeline {
         }
         stage (build) {
             steps {
-                sh "mvn clean install"       //sh "mvn clean install -f mywebapp/prox.xml"   If pom.xml not in root folder
+                sh "mvn clean install"      
+				//sh "mvn clean //sh //mvn clean install -f mywebapp/prox.xml"   If pom.xml not in root folder
             }
         }
-        stage (sonarqube_analysis) {
-           steps {
-              withSonarQubeEnv(credentialsId: 'sonarqube-cred', installationName: 'sonarqube-9') {            // You can override the credential to be used
-			  sh 'mvn sonar:sonar'           //sh "mvn sonar:sonar -f mywebapp/prox.xml"   If pom.xml not in root folder
+        //stage (sonarqubeanalysis) {
+            //steps {
+              //withSonarQubeEnv(credentialsId: 'sonarqube-cred', installationName: 'sonarqube-9') {      // You can override the credential to be used
+	          //sh 'mvn sonar:sonar'                                                                        //sh "mvn sonar:sonar -f mywebapp/prox.xml"   If pom.xml not in root folder
                //sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
-              }
-        } 
-        //stage ('DEV Approve') {
-          // steps {
-           //  echo "Taking approval from DEV Manager for QA Deployment"
-           // timeout(time: 7, unit: 'DAYS') {
-            // input message: 'Do you want to deploy?', submitter: 'admin'
-         // }
-        //}
-      //}	
+              //}
+        //} 
+
+        //stage (nexus_upload) {
+           //steps {
+              //nexusArtifactUploader artifacts: [[artifactId: 'maven-project', classifier: '', file: //'server/target/server.jar', type: 'pom']], credentialsId: 'nexus-cred', groupId: 'com.example.maven-project', //nexusUrl: '3.92.207.138:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'mvn-snapshot', version: //'1.0-SNAPSHOT'		
+              //}
+        //} 
 		
-    }    
+        //stage (deploy_to_dev) {                         #tomcat
+           //steps {
+              //deploy adapters: [tomcat8(path: '', url: 'http://54.82.235.95:8080/')], contextPath: null, war: '**/*.jar'	
+              //}
+        //}
 	
-  }
+       // stage (slack notification) {
+           //   steps {
+           //     slackSend channel: 'dev', message: 'Deployment is done'
+           //    }
+          // } 
+        stage ('DEV Approve') {
+          steps {
+            mail to: 'vinodkumar.chenna@gmail.com, chvinodgcp501@gmail.com', cc: 'vinodkumarchenna.gspann@gmail.com,chvinodgcp501@gmail.com', subject: "Please approve production deployment for aperture.gspann.com #${env.BUILD_NUMBER}", 
+             body: """
+               Hi,
+                Please approve below feature for production release.
+                 Sn.	Jira			Description
+                 1	google         release of 2022
+                Please click to approve the release in production : ${BUILD_URL}input/
+                """
+                input submitterParameter: 'userId', message: 'Ready?'
+		}
+           }
+        //stage (deploy_to_QA) {                         #tomcat
+           //steps {
+              //deploy adapters: [tomcat8(path: '', url: 'http://54.82.235.95:8080/')], contextPath: null, war: '**/*.jar'	
+              //}
+        //}
+	// stage (slack notification) {
+          //   steps {
+          //     slackSend channel: 'dev', message: 'Deployment is done'
+          //    }
+          // } 
+     }
 }

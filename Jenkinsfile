@@ -1,4 +1,4 @@
-currentBuild.displayName = "itrack-aperture-#" + currentBuild.number
+currentBuild.displayName = "itrack-aperture#" + currentBuild.number
 pipeline {
     agent any
     //tools {

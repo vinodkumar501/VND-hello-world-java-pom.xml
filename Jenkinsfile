@@ -1,7 +1,11 @@
 pipeline {
     agent any
-    tools {
-      maven 'mvn-3.8.4'
+    //tools {
+        //maven 'mvn-3.8.4'                    //automatic install of maven using jenkinsUI use like tools
+    //}
+    environment {
+        PATH = "/opt/maven-3/bin:$PATH"        //manual install of maven download tar file in opt and extract and provide like 
+	                                        //https://dlcdn.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
     }
     stages {
         stage (checkout) {
@@ -64,5 +68,10 @@ pipeline {
           //     slackSend channel: 'dev', message: 'Deployment is done'
           //    }
           // } 
-     }
-}
+     }				 
+    post {
+	  always {
+		mail bcc: '', body: "<br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "${currentBuild.result} CI: Project name -> ${env.JOB_NAME}", to: "vinodkumar.chenna@gmail.com";  
+		   }
+	 }
+  }
